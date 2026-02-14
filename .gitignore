@@ -23,9 +23,9 @@ wheels/
 .installed.cfg
 *.egg
 
-# Trained models
-trained_models/*.pkl
-trained_models/*.csv
+# Trained models (uncomment to exclude from git)
+# model/*.pkl
+# model/*.csv
 
 # IDE
 .vscode/
