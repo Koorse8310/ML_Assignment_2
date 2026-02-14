@@ -61,29 +61,21 @@ The following six classification models were implemented and evaluated on the sa
 ```
 ml-assignment-2-main/
 │
-├── streamlit_app.py              # Main Streamlit application entry point
-├── train_classifiers.py          # Script to train all classification models
+├── streamlit_app.py              # Main Streamlit application (includes model training)
 ├── requirements.txt              # Python package dependencies
+├── README.md                     # Project documentation
+├── dataset.csv                   # Training dataset
+├── test.csv                      # Sample test dataset (available for download)
 │
-├── data/                         # Dataset directory
-│   ├── heart_disease_data.csv    # Training dataset
-│   └── test_samples.csv          # Sample test dataset
-│
-├── trained_models/               # Trained model files (generated after training)
-│   ├── logistic_regression.pkl
-│   ├── decision_tree.pkl
-│   ├── k_nearest_neighbors.pkl
-│   ├── gaussian_naive_bayes.pkl
-│   ├── random_forest.pkl
-│   ├── xgboost_classifier.pkl
-│   ├── feature_normalizer.pkl
-│   └── model_performance.csv
-│
-└── src/                          # Source code modules
-    ├── model_training/
-    │   └── classifier_trainer.py # Model training and evaluation module
-    └── web_interface/
-        └── prediction_dashboard.py # Streamlit dashboard implementation
+└── model/                        # Trained model files
+    ├── logistic_regression.pkl
+    ├── decision_tree.pkl
+    ├── knn.pkl
+    ├── naive_bayes.pkl
+    ├── random_forest.pkl
+    ├── xgboost.pkl
+    ├── scaler.pkl
+    └── model_performance.csv
 ```
 
 ## Installation & Setup
@@ -99,11 +91,11 @@ ml-assignment-2-main/
    pip install -r requirements.txt
    ```
 
-2. **Train the models:**
+2. **Run the Streamlit application:**
    ```bash
-   python train_classifiers.py
+   streamlit run streamlit_app.py
    ```
-   This will generate all trained model files in the `trained_models/` directory.
+   The models will be automatically trained on first run if they don't exist. Model files will be saved in the `model/` directory.
 
 ## Usage
 
@@ -137,9 +129,10 @@ This application can be deployed on Streamlit Community Cloud:
 
 ## Notes
 
-- Ensure all model files are trained before running the Streamlit app
+- Models are automatically trained on first run if they don't exist in the `model/` directory
 - The test dataset must contain the same feature columns as the training data
 - The 'target' column is required in test datasets for evaluation
+- You can download the sample test dataset (`test.csv`) directly from the Streamlit app
 
 ## License
 
