@@ -152,6 +152,26 @@ def main():
     </div>
     """, unsafe_allow_html=True)
     
+    # Download test dataset section
+    st.markdown("---")
+    st.subheader("📥 Download Sample Test Dataset")
+    
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.write("Download the sample test dataset to evaluate the models:")
+    with col2:
+        try:
+            with open("test.csv", "rb") as file:
+                st.download_button(
+                    label="⬇️ Download test.csv",
+                    data=file,
+                    file_name="test.csv",
+                    mime="text/csv",
+                    key="download_test"
+                )
+        except FileNotFoundError:
+            st.info("Test dataset file not found.")
+    
     # Model selection
     st.markdown("---")
     st.subheader("🔧 Model Configuration & Data Upload")
