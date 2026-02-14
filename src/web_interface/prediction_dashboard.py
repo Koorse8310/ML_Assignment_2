@@ -11,6 +11,12 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from pathlib import Path
 from sklearn.metrics import confusion_matrix, classification_report
+import sys
+import os
+
+# Add parent directory to path for imports
+sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from src.model_training.classifier_trainer import CardiovascularClassifierTrainer
 
 # Configure page settings
 st.set_page_config(
@@ -62,9 +68,44 @@ class PredictionDashboard:
             "XGBoost Classifier": "xgboost_classifier.pkl"
         }
     
+    def check_and_train_models(self):
+        """Check if models exist, if not, train them."""
+        scaler_exists = self.scaler_path.exists()
+        all_models_exist = all(
+            (self.models_base_path / filename).exists() 
+            for filename in self.available_models.values()
+        )
+        
+        if not scaler_exists or not all_models_exist:
+            return False
+        return True
+    
+    def train_models_if_needed(self):
+        """Train models if they don't exist."""
+        if not self.check_and_train_models():
+            with st.spinner("Training models for the first time. This may take a few minutes..."):
+                try:
+                    trainer = CardiovascularClassifierTrainer(
+                        data_path="data/heart_disease_data.csv",
+                        output_dir="trained_models"
+                    )
+                    trainer.train_all_models()
+                    st.success("✅ Models trained successfully!")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"❌ Error training models: {str(e)}")
+                    st.stop()
+    
     def load_model_and_scaler(self, model_filename):
         """Load the selected model and feature scaler."""
+        # Check and train models if needed
+        self.train_models_if_needed()
+        
         model_path = self.models_base_path / model_filename
+        if not model_path.exists():
+            st.error(f"Model file {model_filename} not found. Please train models first.")
+            st.stop()
+        
         scaler = joblib.load(self.scaler_path)
         model = joblib.load(model_path)
         return model, scaler
