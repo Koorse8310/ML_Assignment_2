@@ -235,15 +235,39 @@ def main():
             
             # Confusion matrix
             st.markdown("---")
-            st.subheader("🧮 Confusion Matrix")
+            st.subheader("🧮 Confusion Matrix Visualization")
             
             cm = confusion_matrix(y, predictions)
             fig, ax = plt.subplots(figsize=(8, 6))
-            sns.heatmap(cm, annot=True, fmt="d", cmap="YlOrRd", ax=ax)
-            ax.set_xlabel("Predicted")
-            ax.set_ylabel("Actual")
-            ax.set_title("Confusion Matrix")
+            sns.heatmap(
+                cm,
+                annot=True,
+                fmt="d",
+                cmap="YlOrRd",
+                cbar_kws={'label': 'Count'},
+                ax=ax,
+                linewidths=0.5,
+                linecolor='gray'
+            )
+            ax.set_xlabel("Predicted Label", fontsize=12, fontweight='bold')
+            ax.set_ylabel("Actual Label", fontsize=12, fontweight='bold')
+            ax.set_title("Confusion Matrix", fontsize=14, fontweight='bold', pad=20)
+            
+            # Add class labels
+            ax.set_xticklabels(['No Disease', 'Disease'])
+            ax.set_yticklabels(['No Disease', 'Disease'])
+            
             st.pyplot(fig)
+            
+            # Confusion matrix interpretation
+            tn, fp, fn, tp = cm.ravel()
+            st.info(f"""
+            **Matrix Interpretation:**
+            - True Negatives (TN): {tn} - Correctly predicted no disease
+            - False Positives (FP): {fp} - Incorrectly predicted disease
+            - False Negatives (FN): {fn} - Missed disease cases
+            - True Positives (TP): {tp} - Correctly predicted disease
+            """)
             
         except Exception as e:
             st.error(f"An error occurred: {str(e)}")
