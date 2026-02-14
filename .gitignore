@@ -44,5 +44,8 @@ Thumbs.db
 # Jupyter
 .ipynb_checkpoints/
 
+# Dev containers
+.devcontainer/
+
 # Data (optional - uncomment if you don't want to track data files)
 # data/*.csv
